@@ -1,0 +1,31 @@
+{
+  "mae": 28626.95,
+  "rmse": 68226.92,
+  "r2": 0.9878,
+  "mape": 7.83,
+  "best_model": "WeightedEnsemble_L2",
+  "target": "visitors_total",
+  "train_size": 693,
+  "test_size": 924,
+  "features": [
+    "year",
+    "month",
+    "quarter",
+    "month_sin",
+    "month_cos",
+    "is_high_season",
+    "province_code",
+    "region_code",
+    "occupancy_rate",
+    "checkin_count",
+    "visitors_thai",
+    "visitors_foreign",
+    "foreign_ratio",
+    "revenue_total_mb",
+    "revenue_per_visitor",
+    "visitors_lag1",
+    "visitors_lag3",
+    "visitors_lag12",
+    "visitors_roll3"
+  ]
+}

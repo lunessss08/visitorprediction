@@ -395,7 +395,7 @@ try:
         "rmse": round(rmse, 2),
         "r2": round(r2, 4),
         "mape": round(mape, 2),
-        "best_model": predictor.get_model_best(),
+        "best_model": predictor.model_best,
         "target": TARGET_COL,
         "train_size": len(train_ag),
         "test_size": len(test_ag),
@@ -432,7 +432,7 @@ try:
     print(
         f"""
 {'='*55}
-  🏆 Best Model : {predictor.get_model_best()}
+  🏆 Best Model : {predictor.model_best}
   📊 R²         : {r2:.4f}
   📉 MAPE       : {mape:.2f}%
 {'='*55}
