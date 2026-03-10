@@ -1,0 +1,7 @@
+{
+  "mae": 25290.25,
+  "rmse": 52583.15,
+  "r2": 0.9927,
+  "mape": 7.93,
+  "best_model": "WeightedEnsemble_L2"
+}
