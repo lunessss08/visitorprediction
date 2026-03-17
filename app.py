@@ -169,29 +169,26 @@ app.layout = html.Div(
             ],
             style={"display": "flex", "justifyContent": "space-between"},
         ),
+        
+        
+        #Map
         html.Br(),
         html.H2("Tourism Map (Click Province)"),
         dcc.Graph(id="tourism_map"),
         html.Br(),
         html.H2(id="province_title", style={"textAlign": "center"}),
+        
+        
+        #2025 predicttion
         html.H3("Actual vs Predicted (2025)"),
         dcc.Graph(id="actual_chart"),
+        
+        
+        #2026 forecast prediction
         html.H3("Tourist Forecast 2026"),
         dcc.Graph(id="forecast_chart"),
-        html.H3("Prediction Results"),
-        dash_table.DataTable(
-            id="result_table",
-            columns=[
-                {"name": "Date", "id": "date"},
-                {"name": "Province", "id": "province"},
-                {"name": "Actual Visitors", "id": "visitors_total"},
-                {"name": "Predicted", "id": "predicted"},
-                {"name": "Error", "id": "error"},
-                {"name": "Error %", "id": "error_pct"},
-            ],
-            page_size=10,
-            style_cell={"textAlign": "center"},
-        ),
+        
+        
     ],
     style={"maxWidth": "1200px", "margin": "auto", "padding": "20px"},
 )
@@ -238,7 +235,6 @@ def update_map(_):
     Output("province_title", "children"),
     Output("actual_chart", "figure"),
     Output("forecast_chart", "figure"),
-    Output("result_table", "data"),
     Input("tourism_map", "clickData"),
 )
 def update_dashboard(clickData):
@@ -270,7 +266,7 @@ def update_dashboard(clickData):
 
     title = f"Province : {province}"
 
-    return title, fig1, fig2, dff.to_dict("records")
+    return title, fig1, fig2
 
 
 # ---------------------------
