@@ -178,6 +178,36 @@ print("Saved model_metrics.json")
 # ─────────────────────────────
 # FORECAST 2026
 # ─────────────────────────────
+
+
+# REFIT MODEL (ใช้ 2024 + 2025)
+
+print("Refitting models with full data (2025 included)")
+
+train_full = df_model[df_model["year"] <= 2025]
+
+predictor_thai = TabularPredictor(
+    label=TARGET_THAI,
+    path=str(MODEL_DIR / "thai_model_final"),
+    eval_metric="root_mean_squared_error",
+).fit(
+    train_data=train_full[FEATURE_COLS + [TARGET_THAI]],
+    time_limit=TIME_LIMIT,
+    presets=PRESET,
+    refit_full=True
+)
+
+predictor_foreign = TabularPredictor(
+    label=TARGET_FOREIGN,
+    path=str(MODEL_DIR / "foreign_model_final"),
+    eval_metric="root_mean_squared_error",
+).fit(
+    train_data=train_full[FEATURE_COLS + [TARGET_FOREIGN]],
+    time_limit=TIME_LIMIT,
+    presets=PRESET,
+    refit_full=True
+)
+
 print("Forecasting 2026")
 
 last_rows = df_model.sort_values("date").groupby("province").tail(1)
@@ -188,11 +218,15 @@ for step in range(1, 13):
 
     future_df = last_rows.copy()
 
-    future_df["date"] = future_df["date"] + pd.DateOffset(months=step)
-
+    next_date = last_rows["date"].max() + pd.DateOffset(months=1)
+    next_date = pd.to_datetime(next_date).to_period("M").to_timestamp()
+    
+    future_df["date"] = next_date
+    last_rows["date"] = next_date
+    
     future_df["year"] = future_df["date"].dt.year
     future_df["month"] = future_df["date"].dt.month
-    future_df["quarter"] = future_df["date"].dt.quarter
+    future_df["quarter"] = future_df["date"].dt.quarter 
 
     future_df["month_sin"] = np.sin(2 * np.pi * future_df["month"] / 12)
     future_df["month_cos"] = np.cos(2 * np.pi * future_df["month"] / 12)

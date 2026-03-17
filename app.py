@@ -117,7 +117,7 @@ pred_df["visitors_total"] = pred_df["visitors_thai"] + pred_df["visitors_foreign
 pred_df["predicted"] = pred_df["visitors_total_pred"]
 
 pred_df["error"] = pred_df["visitors_total"] - pred_df["predicted"]
-pred_df["error_pct"] = abs(pred_df["error"] / pred_df["visitors_total"]) * 100
+pred_df["error_pct"] = abs(pred_df["error"] / pred_df["visitors_total"].replace(0,1)) * 100
 
 # ---------------------------
 # MAP DATA
@@ -144,9 +144,8 @@ def classify(x):
 
 map_df["tourism_level"] = map_df["visitors_total"].apply(classify)
 
-default_province = future_df.sort_values("visitors_total", ascending=False).iloc[0][
-    "province"
-]
+default_province = "กรุงเทพมหานคร"
+
 
 # ---------------------------
 # DASH APP
@@ -156,18 +155,16 @@ app = dash.Dash(__name__)
 app.layout = html.Div(
     [
         html.H1("Thailand Tourism Forecast Dashboard", style={"textAlign": "center"}),
-        html.Div(
+        html.H2(
             [
+
                 html.Div(
-                    [html.H4("R² Score"), html.H2(metrics["r2"])],
-                    style={"width": "45%", "textAlign": "center"},
-                ),
-                html.Div(
-                    [html.H4("MAPE"), html.H2(f"{metrics['mape']} %")],
+                    [   html.H3("MAPE"), 
+                        html.H3(f"{metrics['mape']} %")],
                     style={"width": "45%", "textAlign": "center"},
                 ),
             ],
-            style={"display": "flex", "justifyContent": "space-between"},
+            style={"display": "flex", "justifyContent": "center"},
         ),
         
         
@@ -199,7 +196,7 @@ app.layout = html.Div(
 # ---------------------------
 @app.callback(
     Output("tourism_map", "figure"),
-    Input("actual_chart", "id"),
+    Input("tourism_map", "id"),
 )
 def update_map(_):
 
